@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Form Validazione Completa</title>
+<style>
+  input, select {
+    border: 2px solid gray;
+    padding: 5px;
+    margin-bottom: 10px;
+    display: block;
+  }
+</style>
+<script>
+function checkJS() {
+  document.getElementById('JS').style.display = "block";
+}
+
+// --- VALIDAZIONI ---
+
+function validaEmail() {
+  const email = document.getElementById("email_id");
+  const regex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if(regex.test(email.value)) {
+    email.style.border = "2px solid green";
+    return true;
+  } else {
+    email.style.border = "2px solid red";
+    return false;
+  }
+}
+
+function validaCodiceFiscale() {
+  const cf = document.getElementById("codice_fiscale_id");
+  const regex = /^[A-Z]{6}[0-9LMNP-V]{2}[A-Z][0-9LMNP-V]{2}[A-Z][0-9LMNP-V]{3}[A-Z]$/;
+  if(regex.test(cf.value)) {
+    cf.style.border = "2px solid green";
+    return true;
+  } else {
+    cf.style.border = "2px solid red";
+    return false;
+  }
+}
+
+function validaPartitaIVA() {
+  const piva = document.getElementById("partita_iva");
+  const regex = /^[0-9]{11}$/;
+  if(regex.test(piva.value)) {
+    piva.style.border = "2px solid green";
+    return true;
+  } else {
+    piva.style.border = "2px solid red";
+    return false;
+  }
+}
+
+function validaSelect() {
+  const select = document.getElementById("select_tipo");
+  if(select.value !== "") {
+    select.style.border = "2px solid green";
+    return true;
+  } else {
+    select.style.border = "2px solid red";
+    return false;
+  }
+}
+
+function validaSesso() {
+  const radios = document.querySelectorAll(".sesso");
+  let valid = false;
+  radios.forEach(r => { if(r.checked) valid = true; });
+  radios.forEach(r => r.style.outline = valid ? "2px solid green" : "2px solid red");
+  return valid;
+}
+
+function validaHobbies() {
+  const checked = document.querySelectorAll(".hobbie:checked");
+  const all = document.querySelectorAll(".hobbie");
+  let valid = checked.length >= 2;
+  all.forEach(h => h.style.outline = valid ? "2px solid green" : "2px solid red");
+  return valid;
+}
+
+function validaForm(event) {
+  const e = validaEmail();
+  const cf = validaCodiceFiscale();
+  const p = validaPartitaIVA();
+  const s = validaSelect();
+  const r = validaSesso();
+  const h = validaHobbies();
+
+  if(!(e && cf && p && s && r && h)) {
+    alert("Alcuni campi non sono validi. Controlla quelli in rosso!");
+    event.preventDefault();
+    return false;
+  }
+  return true;
+}
+</script>
+</head>
+
+<body onload="checkJS()">
+<div id="JS" style="display:none;">
+<form onsubmit="return validaForm(event)">
+  <h2>Javascript attivo!!!</h2>
+  <h2>Compila tutti i campi. Formato richiesto indicato.</h2>
+
+  Your email 
+  <input type="text" id="email_id" name="email_name" required 
+         onblur="validaEmail()">
+
+  Codice Fiscale
+  <input type="text" id="codice_fiscale_id" name="codice_fiscale_name" maxlength="16" required 
+         onblur="validaCodiceFiscale()">
+
+  Partita IVA
+  <input type="text" id="partita_iva" name="partita_iva" maxlength="11" required 
+         onblur="validaPartitaIVA()">
+
+  Tipo
+  <select id="select_tipo" name="select_tipo" required 
+          onchange="validaSelect()">
+    <option value="">-- Seleziona un tipo --</option>
+    <option value="normale">normale</option>
+    <option value="levano">levano</option>
+  </select>
+
+  Sesso
+  <input type="radio" name="sesso" class="sesso" id="maschio" value="maschio" required 
+         onchange="validaSesso()"> Maschio
+  <input type="radio" name="sesso" class="sesso" id="femmina" value="femmina" required 
+         onchange="validaSesso()"> Femmina
+
+  Hobbies (almeno 2)
+  <input type="checkbox" name="hobbie" class="hobbie" id="pesca" value="pesca" onchange="validaHobbies()"> Pesca
+  <input type="checkbox" name="hobbie" class="hobbie" id="uncinetto" value="uncinetto" onchange="validaHobbies()"> Uncinetto
+  <input type="checkbox" name="hobbie" class="hobbie" id="scacchi" value="scacchi" onchange="validaHobbies()"> Scacchi
+
+  <br>
+  <input type="submit" value="Click to create your dog">
+</form>
+</div>
+
+<noscript>
+  <div style="color: red;">
+    JavaScript è disabilitato. Questo form richiede JS.
+  </div>
+</noscript>
+</body>
+</html>
